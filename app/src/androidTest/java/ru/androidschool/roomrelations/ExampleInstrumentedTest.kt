@@ -73,7 +73,7 @@ class ManyToManyTest {
 
         val all = underTest.getMoviesAndGenres()
 
-        assertThat(all, hasSize(equalTo(4)))
+        assertThat(all, hasSize(equalTo(2)))
         assertThat(all[0].genre, equalTo(horrorGenre))
         assertThat(all[1].genre, equalTo(comedyGenre))
 
