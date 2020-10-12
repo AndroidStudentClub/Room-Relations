@@ -2,29 +2,39 @@ package ru.androidschool.roomrelations
 
 import androidx.room.*
 
-@Entity
+@Entity(tableName = "moviesManyToMany")
 data class Movie(
     @PrimaryKey
+    @ColumnInfo(name = "movieId")
     val id: Long,
-    val movieGenreId: Long,
     @ColumnInfo(name = "title")
     val title: String?
 )
 
 @Entity
 data class Genre(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val genreId: Long,
     val genreName: String
 )
 
+@Entity(primaryKeys = ["movieId", "genreId"])
+data class MovieAndGenreCrossRef(
+    val movieId: Long,
+    val genreId: Long
+)
 
 data class MovieAndGenre(
     @Embedded
     val genre: Genre,
     @Relation(
         parentColumn = "genreId",
-        entityColumn = "movieGenreId"
+        entityColumn = "movieId",
+        associateBy = Junction(
+            MovieAndGenreCrossRef::class,
+            parentColumn = "genreId",
+            entityColumn = "movieId"
+        )
     )
     val movies: List<Movie>
 )

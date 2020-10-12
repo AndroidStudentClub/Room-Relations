@@ -17,7 +17,7 @@ import org.junit.Rule
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class OneToManyTest {
+class ManyToManyTest {
     @get:Rule
 
     private val db = Room.inMemoryDatabaseBuilder(
@@ -31,32 +31,57 @@ class OneToManyTest {
     @Test
     fun relations() {
 
-        val horror = Genre(1, "Ужасы")
-        val comedy = Genre(2, "Комедии")
+        val horrorGenre = Genre(1, "Ужасы")
+        val comedyGenre = Genre(2, "Комедии")
 
-        val movieOne = Movie(1, horror.genreId, "Очень страшный фильм")
-        val movieTwo = Movie(0, comedy.genreId, "Очень смешной фильм")
+        val horrorMovie = Movie(1, "Очень страшный фильм")
+
+        val comedyMovie = Movie(2, "Очень смешной фильм")
+
+        val strangeMovie = Movie(3, "Очень смешной фильм и страшный фильм")
 
         assertEquals(true, underTest.getMoviesAndGenres().isEmpty())
 
-        underTest.save(horror)
-        underTest.save(comedy)
+        val joinOne = MovieAndGenreCrossRef(
+            movieId = horrorMovie.id,
+            genreId = horrorGenre.genreId
+        )
 
-        underTest.save(listOf(movieOne, movieTwo))
+        val joinTwo = MovieAndGenreCrossRef(
+            movieId = comedyMovie.id,
+            genreId = comedyGenre.genreId
+        )
+
+        val joinThree = MovieAndGenreCrossRef(
+            movieId = strangeMovie.id,
+            genreId = comedyGenre.genreId
+        )
+
+        val joinFour = MovieAndGenreCrossRef(
+            movieId = strangeMovie.id,
+            genreId = horrorGenre.genreId
+        )
+
+        underTest.save(horrorGenre)
+        underTest.save(comedyGenre)
+
+        underTest.save(listOf(horrorMovie, comedyMovie,strangeMovie))
+
+        underTest.saveJoins(listOf(joinOne, joinTwo,joinThree,joinFour))
 
         assertEquals(false, underTest.getMoviesAndGenres().isEmpty())
 
         val all = underTest.getMoviesAndGenres()
 
-        assertThat(all, hasSize(equalTo(2)))
-        assertThat(all[0].genre, equalTo(horror))
-        assertThat(all[1].genre, equalTo(comedy))
+        assertThat(all, hasSize(equalTo(4)))
+        assertThat(all[0].genre, equalTo(horrorGenre))
+        assertThat(all[1].genre, equalTo(comedyGenre))
 
-        val loaded = underTest.loadByGenreId(comedy.genreId)
+        val loaded = underTest.loadByGenreId(comedyGenre.genreId)
 
-        assertThat(loaded.genre, equalTo(comedy))
+        assertThat(loaded.genre, equalTo(comedyGenre))
         assertThat(
-            loaded.movies[0], equalTo(movieTwo)
+            loaded.movies[0], equalTo(comedyMovie)
         )
     }
 }
