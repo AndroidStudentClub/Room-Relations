@@ -22,41 +22,44 @@ class OneToManyTest {
 
     private val db = Room.inMemoryDatabaseBuilder(
         InstrumentationRegistry.getInstrumentation().targetContext,
-        MovieDatabase::class.java
+        HomeDatabase::class.java
     )
         .build()
 
-    private val underTest = db.movieDao()
+    private val underTest = db.homeDao()
 
     @Test
     fun relations() {
 
-        val horror = Genre(1, "Ужасы")
-        val comedy = Genre(2, "Комедии")
+        val moscow = Apartment(1, "Москва", 55)
+        val spb = Apartment(2, "Питер",56)
+        val sochi = Apartment(3, "Сочи",55)
 
-        val movieOne = Movie(1, horror.genreId, "Очень страшный фильм")
-        val movieTwo = Movie(0, comedy.genreId, "Очень смешной фильм")
+        val user1 = User(55,  "Вася")
+        val user2 = User(56,  "Петя")
 
-        assertEquals(true, underTest.getMoviesAndGenres().isEmpty())
+        assertEquals(true, underTest.getUserAndAparts().isEmpty())
 
-        underTest.save(horror)
-        underTest.save(comedy)
+        underTest.save(moscow)
+        underTest.save(spb)
+        underTest.save(sochi)
 
-        underTest.save(listOf(movieOne, movieTwo))
+        underTest.save(listOf(user1,user2))
 
-        assertEquals(false, underTest.getMoviesAndGenres().isEmpty())
+        assertEquals(false, underTest.getUserAndAparts().isEmpty())
 
-        val all = underTest.getMoviesAndGenres()
+        val all = underTest.getUserAndAparts()
 
         assertThat(all, hasSize(equalTo(2)))
-        assertThat(all[0].genre, equalTo(horror))
-        assertThat(all[1].genre, equalTo(comedy))
+        assertThat(all[0].apartments[0], equalTo(moscow))
+        assertThat(all[1].apartments[0], equalTo(spb))
+        assertThat(all[0].apartments[1], equalTo(sochi))
 
-        val loaded = underTest.loadByGenreId(comedy.genreId)
+        val loaded = underTest.loadByUserId(moscow.ownerId)
 
-        assertThat(loaded.genre, equalTo(comedy))
-        assertThat(
-            loaded.movies[0], equalTo(movieTwo)
-        )
+//        assertThat(loaded.user, equalTo(moscow))
+//        assertThat(
+//            loaded.movies[0], equalTo(movieTwo)
+//        )
     }
 }
