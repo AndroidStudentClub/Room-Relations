@@ -23,8 +23,7 @@ class ManyToManyTest {
     private val db = Room.inMemoryDatabaseBuilder(
         InstrumentationRegistry.getInstrumentation().targetContext,
         MovieDatabase::class.java
-    )
-        .build()
+    ).build()
 
     private val underTest = db.movieDao()
 
@@ -65,23 +64,23 @@ class ManyToManyTest {
         underTest.save(horrorGenre)
         underTest.save(comedyGenre)
 
-        underTest.save(listOf(horrorMovie, comedyMovie,strangeMovie))
+        underTest.save(listOf(horrorMovie, comedyMovie, strangeMovie))
 
-        underTest.saveJoins(listOf(joinOne, joinTwo,joinThree,joinFour))
+        underTest.saveJoins(listOf(joinOne, joinTwo, joinThree, joinFour))
 
         assertEquals(false, underTest.getMoviesAndGenres().isEmpty())
 
         val all = underTest.getMoviesAndGenres()
 
-        assertThat(all, hasSize(equalTo(2)))
-        assertThat(all[0].genre, equalTo(horrorGenre))
-        assertThat(all[1].genre, equalTo(comedyGenre))
+        assertEquals(all.size, 2)
+        assertEquals(all[0].genre, horrorGenre)
+        assertEquals(all[1].genre, comedyGenre)
 
         val loaded = underTest.loadByGenreId(comedyGenre.genreId)
 
-        assertThat(loaded.genre, equalTo(comedyGenre))
-        assertThat(
-            loaded.movies[0], equalTo(comedyMovie)
+        assertEquals(loaded.genre, comedyGenre)
+        assertEquals(
+            loaded.movies[0], comedyMovie
         )
     }
 }
