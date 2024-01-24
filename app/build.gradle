@@ -1,15 +1,15 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp' version "1.9.20-1.0.14"
 }
 
 android {
-    compileSdkVersion 34
 
     defaultConfig {
         applicationId "ru.androidschool.roomrelations"
         minSdkVersion 21
+        compileSdk 34
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
@@ -25,9 +25,10 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+    namespace 'ru.androidschool.roomrelations'
 }
 
 dependencies {
@@ -43,5 +44,5 @@ dependencies {
     def room_version = "2.6.1"
 
     implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    ksp "androidx.room:room-compiler:$room_version"
 }

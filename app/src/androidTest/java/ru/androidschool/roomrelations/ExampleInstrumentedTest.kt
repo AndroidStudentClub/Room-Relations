@@ -19,7 +19,6 @@ import org.junit.Rule
 @RunWith(AndroidJUnit4::class)
 class ManyToManyTest {
     @get:Rule
-
     private val db = Room.inMemoryDatabaseBuilder(
         InstrumentationRegistry.getInstrumentation().targetContext,
         MovieDatabase::class.java
