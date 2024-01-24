@@ -32,11 +32,11 @@ class OneToManyTest {
     fun relations() {
 
         val moscow = Apartment(1, "Москва", 55)
-        val spb = Apartment(2, "Питер",56)
-        val sochi = Apartment(3, "Сочи",55)
+        val spb = Apartment(2, "Питер", 56)
+        val sochi = Apartment(3, "Сочи", 55)
 
-        val user1 = User(55,  "Вася")
-        val user2 = User(56,  "Петя")
+        val ownerV = User(55, "Вася")
+        val ownerP = User(56, "Петя")
 
         assertEquals(true, underTest.getUserAndAparts().isEmpty())
 
@@ -44,22 +44,20 @@ class OneToManyTest {
         underTest.save(spb)
         underTest.save(sochi)
 
-        underTest.save(listOf(user1,user2))
+        underTest.save(listOf(ownerV, ownerP))
 
         assertEquals(false, underTest.getUserAndAparts().isEmpty())
 
         val all = underTest.getUserAndAparts()
 
-        assertThat(all, hasSize(equalTo(2)))
-        assertThat(all[0].apartments[0], equalTo(moscow))
-        assertThat(all[1].apartments[0], equalTo(spb))
-        assertThat(all[0].apartments[1], equalTo(sochi))
+        assertEquals(all.size, 2)
+        assertEquals(all[0].apartments[0], moscow)
+        assertEquals(all[1].apartments[0], spb)
+        assertEquals(all[0].apartments[1], sochi)
 
         val loaded = underTest.loadByUserId(moscow.ownerId)
 
-//        assertThat(loaded.user, equalTo(moscow))
-//        assertThat(
-//            loaded.movies[0], equalTo(movieTwo)
-//        )
+        assertEquals(loaded.user, ownerV)
+
     }
 }
