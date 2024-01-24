@@ -19,12 +19,10 @@ import org.junit.Rule
 @RunWith(AndroidJUnit4::class)
 class OneToManyTest {
     @get:Rule
-
     private val db = Room.inMemoryDatabaseBuilder(
         InstrumentationRegistry.getInstrumentation().targetContext,
         HomeDatabase::class.java
-    )
-        .build()
+    ).build()
 
     private val underTest = db.homeDao()
 
