@@ -11,7 +11,6 @@ abstract class HomeDatabase : RoomDatabase() {
 
     companion object {
         private var instance: HomeDatabase? = null
-
         @Synchronized
         fun get(context: Context): HomeDatabase {
             if (instance == null) {
