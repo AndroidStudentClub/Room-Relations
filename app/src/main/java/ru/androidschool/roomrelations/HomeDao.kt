@@ -6,13 +6,13 @@ import androidx.room.*
 interface HomeDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(genre: Apartment)
+    fun save(apartment: Apartment)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(movie: User)
+    fun save(user: User)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(movies: List<User>)
+    fun save(users: List<User>)
 
     @Transaction
     @Query("SELECT * FROM User")
